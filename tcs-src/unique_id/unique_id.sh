@@ -32,9 +32,9 @@ function initialize
       report_status "Restoring to last issued unique id : ${running_message_id}"
    fi
 
-   if [[ -n ${GARBAGE_COLLECTION_SERVICE_DIRECTORY} ]] && [[ -d ${GARBAGE_COLLECTION_SERVICE_DIRECTORY} ]]; then
-      report_status "GARBAGE_COLLECTION_SERVICE_DIRECTORY available..."
-      echo "UniqueService:3:${UNIQUE_ID_SERVICE_DIRECTORY}" > ${GARBAGE_COLLECTION_SERVICE_DIRECTORY}/notify_unique
+   if [[ -n ${GARBAGE_COLLECTOR_SERVICE_DIRECTORY} ]] && [[ -d ${GARBAGE_COLLECTOR_SERVICE_DIRECTORY} ]]; then
+      report_status "GARBAGE_COLLECTOR_SERVICE_DIRECTORY available..."
+      echo "UniqueService:3:${UNIQUE_ID_SERVICE_DIRECTORY}" > ${GARBAGE_COLLECTOR_SERVICE_DIRECTORY}/notify_unique
    fi
 }
 

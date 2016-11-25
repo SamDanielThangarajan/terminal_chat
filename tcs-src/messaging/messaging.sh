@@ -88,14 +88,14 @@ if [[ -z ${REGISTRY_SERVICE_DIRECTORY} ]]; then
    exit 1
 fi
 
-if [[ -n ${GARBAGE_COLLECTION_SERVICE_DIRECTORY} ]] && [[ -d ${GARBAGE_COLLECTION_SERVICE_DIRECTORY} ]]; then
-   echo "GARBAGE_COLLECTION_SERVICE_DIRECTORY is available!"
-   report_status "GARBAGE_COLLECTION_SERVICE_DIRECTORY is available!"
+if [[ -n ${GARBAGE_COLLECTOR_SERVICE_DIRECTORY} ]] && [[ -d ${GARBAGE_COLLECTOR_SERVICE_DIRECTORY} ]]; then
+   echo "GARBAGE_COLLECTOR_SERVICE_DIRECTORY is available!"
+   report_status "GARBAGE_COLLECTOR_SERVICE_DIRECTORY is available!"
 
    #Post a notification to consume, don't wait for response.
    get_unique_id
    notify_id=$?
-   echo "MessagingService:3:${MESSAGING_SERVICE_DIRECTORY}" > ${GARBAGE_COLLECTION_SERVICE_DIRECTORY}/notify_${notify_id}
+   echo "MessagingService:3:${MESSAGING_SERVICE_DIRECTORY}" > ${GARBAGE_COLLECTOR_SERVICE_DIRECTORY}/notify_${notify_id}
 fi
 
 
@@ -107,28 +107,23 @@ do
       req_id=$(echo $file | sed 's/request_//')
 
       #First Line
-      from=`head ${path}`
+      from=`head -1 ${path}`
       #Second line
       to=`head -2 ${path} | tail -1`
       #third line
       msg=`head -3 ${path} | tail -1`
 
-      report_status "Processing $file"
-
-
       check_name ${from}
       if [[ $? -eq 0 ]] ; then
-         echo "from exists"
 
          check_name ${to}
-         if [[ $? -eq 0 ]] ; then
-            echo "to exists"
+         if [[ $? -ne 0 ]] ; then
+            report_status "ERROR : ${to} does not exists!"
+         else
+            mkdir -p ${MESSAGING_SERVICE_DIRECTORY}/${to}
+            filename=${from}_${req_id}
+            echo $msg >> ${MESSAGING_SERVICE_DIRECTORY}/${to}/${filename}
          fi
-
-         mkdir -p ${MESSAGING_SERVICE_DIRECTORY}/${to}
-
-         echo $msg > ${MESSAGING_SERVICE_DIRECTORY}/${to}/${req_id}
-
       fi
 
       rm -rf ${path}

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ## xpected variables
-## GARBAGE_COLLECTION_SERVICE_DIRECTORY
+## GARBAGE_COLLECTOR_SERVICE_DIRECTORY
 ## STATUS_REPORT_FILE
 
 ## Now a single counter is used for all services,
@@ -10,7 +10,7 @@
 ## Registration format
 ## ServiceName:toleranceminutes:path
 
-internal_memory_file=${GARBAGE_COLLECTION_SERVICE_DIRECTORY}/gcs.db
+internal_memory_file=${GARBAGE_COLLECTOR_SERVICE_DIRECTORY}/gcs.db
 
 
 #Default interval is 5 seconds, but can be customized
@@ -34,7 +34,7 @@ function report_status
 
 function handle_registrations
 {
-   for path in `ls -1 ${GARBAGE_COLLECTION_SERVICE_DIRECTORY}/notify_* 2>/dev/null`; do
+   for path in `ls -1 ${GARBAGE_COLLECTOR_SERVICE_DIRECTORY}/notify_* 2>/dev/null`; do
       local content=`cat ${path}`
       grep ${content} ${internal_memory_file} 2>/dev/null
       if [[ $? -eq 0 ]]; then
@@ -85,9 +85,9 @@ function collect_garbages
 
 report_status "started..."
 
-if [[ -z ${GARBAGE_COLLECTION_SERVICE_DIRECTORY} ]]; then
-   echo "GARBAGE_COLLECTION_SERVICE_DIRECTORY not defined, exiting..."
-   report_status "GARBAGE_COLLECTION_SERVICE_DIRECTORY not defined, exiting..."
+if [[ -z ${GARBAGE_COLLECTOR_SERVICE_DIRECTORY} ]]; then
+   echo "GARBAGE_COLLECTOR_SERVICE_DIRECTORY not defined, exiting..."
+   report_status "GARBAGE_COLLECTOR_SERVICE_DIRECTORY not defined, exiting..."
    exit 1
 fi
 

@@ -56,6 +56,10 @@ function register
    return_msg="OK"
 }
 
+function list_users
+{
+   return_msg=`cat ${database_file} | awk -F':' '{print $1}'`
+}
 
 ###############################################
 ## Main
@@ -69,9 +73,9 @@ if [[ -z ${REGISTRY_SERVICE_DIRECTORY} ]]; then
    exit 1
 fi
 
-if [[ -n ${GARBAGE_COLLECTION_SERVICE_DIRECTORY} ]] && [[ -d ${GARBAGE_COLLECTION_SERVICE_DIRECTORY} ]]; then
-   report_status "GARBAGE_COLLECTION_SERVICE_DIRECTORY available..."
-   echo "RegistryService:3:${REGISTRY_SERVICE_DIRECTORY}" > ${GARBAGE_COLLECTION_SERVICE_DIRECTORY}/notify_registry
+if [[ -n ${GARBAGE_COLLECTOR_SERVICE_DIRECTORY} ]] && [[ -d ${GARBAGE_COLLECTOR_SERVICE_DIRECTORY} ]]; then
+   report_status "GARBAGE_COLLECTOR_SERVICE_DIRECTORY available..."
+   echo "RegistryService:3:${REGISTRY_SERVICE_DIRECTORY}" > ${GARBAGE_COLLECTOR_SERVICE_DIRECTORY}/notify_registry
 fi
 
 if [[ ! -e ${database_file} ]]; then
@@ -98,6 +102,9 @@ do
             ;;
          NAME_CHECK)
             check_name ${contents}
+            ;;
+         LIST_USERS)
+            list_users
             ;;
          *)
             return_msg="ERROR : Invalid command"
