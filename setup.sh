@@ -4,7 +4,7 @@ SCRIPT_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 SERVICE_DIRECTORIES_ROOT=${SCRIPT_PATH}/tcs_working_dir
 SOURCE_DIRECTORY=${SCRIPT_PATH}/tcs-src
-
+DOCKER_FILES_DIRECTORY=${SCRIPT_PATH}/docker_files
 
 # Service Directories
 export UNIQUE_ID_SERVICE_DIRECTORY=${SERVICE_DIRECTORIES_ROOT}/unique_id_service/
@@ -41,6 +41,10 @@ alias start-room="${SOURCE_DIRECTORY}/room/room.sh"
 alias start-srv-reg="${SOURCE_DIRECTORY}/service_registry/service_registry.sh"
 alias start-uniq="${SOURCE_DIRECTORY}/unique_id/unique_id.sh"
 
-
-
-
+# Alias for docker-related command
+alias build-docker-images="${DOCKER_FILES_DIRECTORY}/build_images.sh"
+alias serv-start-gc="docker run -d -v ${SERVICE_DIRECTORIES_ROOT}:/tmp/tcs-working-dir/ gc_service"
+alias serv-start-messaging="docker run -d -v ${SERVICE_DIRECTORIES_ROOT}:/tmp/tcs-working-dir/ messaging_service"
+alias serv-start-registry="docker run -d -v ${SERVICE_DIRECTORIES_ROOT}:/tmp/tcs-working-dir/ registry_service"
+alias serv-start-uniq="docker run -d -v ${SERVICE_DIRECTORIES_ROOT}:/tmp/tcs-working-dir/ uniqueid_service"
+alias serv-start-all="serv-start-uniq && serv-start-registry && serv-start-messaging && serv-start-gc"

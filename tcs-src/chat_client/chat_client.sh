@@ -173,6 +173,7 @@ function read_message_from
    do
       for file in `ls -tr1 ${MESSAGING_SERVICE_DIRECTORY}/${USER_NAME}/${1}_* 2>/dev/null`
       do
+         echo ""
          cat $file | sed "s/^/$1:/"
          cat $file | sed "s/^/$1:/" >> ${USER_NAME}_chatwith_${1}
          rm -rf $file
@@ -197,7 +198,8 @@ function chat_with
    echo "Type quit to end the chat session"
    while :
    do
-      printf '${USER_NAME} :'
+      echo ""
+      printf "${USER_NAME} :"
       read -t 10 _cw_txt
       if [[ $? -ne 0 ]];then
          read_message_from ${1}
