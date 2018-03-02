@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+option java_package = "com.github.samdaniel.tcs.microservices.uniqueid.generated";
+
+message UniqueIdRequest {
+ int32 request_id = 1;
+} 
+
+message UniqueIdResponse {
+ int32 request_id = 1;
+ string unique_id = 2;
+}
+
+
+service UniqueIdService {
+  rpc GetUniqueId (UniqueIdRequest) returns (UniqueIdResponse);
+}

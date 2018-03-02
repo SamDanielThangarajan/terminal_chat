@@ -1,0 +1,213 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+   <name>uniqueId</name>
+   <modelVersion>4.0.0</modelVersion>
+   <groupId>com.github.samdaniel.tcs.microservices</groupId>
+   <artifactId>uniqueid</artifactId>
+   <version>0.0.1-SNAPSHOT</version>
+   <packaging>jar</packaging>
+
+   <properties>
+      <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+      <suite>src/main/resources/test.xml</suite>
+      <skipTests>true</skipTests>
+   </properties>
+
+   <dependencies>
+      <!-- Test NG -->
+      <dependency>
+         <groupId>org.testng</groupId>
+         <artifactId>testng</artifactId>
+         <version>6.10</version>
+         <scope>compile</scope>
+      </dependency>
+
+      <!-- GRPC -->
+      <dependency>
+         <groupId>io.grpc</groupId>
+         <artifactId>grpc-netty</artifactId>
+         <version>1.10.0</version>
+      </dependency>
+      <dependency>
+         <groupId>io.grpc</groupId>
+         <artifactId>grpc-protobuf</artifactId>
+         <version>1.10.0</version>
+      </dependency>
+      <dependency>
+         <groupId>io.grpc</groupId>
+         <artifactId>grpc-stub</artifactId>
+         <version>1.10.0</version>
+      </dependency>
+
+      <!-- PROTOCOL BUFFERS RUNTIME -->
+      <dependency>
+         <groupId>com.google.protobuf</groupId>
+         <artifactId>protobuf-java</artifactId>
+         <version>3.5.1</version>
+      </dependency>
+
+      <!-- GRPC PROTOCOL BUFFERS PLUGIN -->
+      <dependency>
+         <groupId>com.google.api.grpc</groupId>
+         <artifactId>proto-google-common-protos</artifactId>
+         <version>1.0.0</version>
+      </dependency>
+
+      <!-- Open Tracing -->
+      <dependency>
+         <groupId>io.opentracing</groupId>
+         <artifactId>opentracing-api</artifactId>
+         <version>0.31.0</version>
+      </dependency>
+      <dependency>
+         <groupId>io.opentracing</groupId>
+         <artifactId>opentracing-noop</artifactId>
+         <version>0.31.0</version>
+      </dependency>
+      <dependency>
+         <groupId>io.opentracing</groupId>
+         <artifactId>opentracing-util</artifactId>
+         <version>0.31.0</version>
+      </dependency>
+      <dependency>
+         <groupId>io.opentracing</groupId>
+         <artifactId>opentracing-mock</artifactId>
+         <version>0.31.0</version>
+      </dependency>
+
+      <!-- Jaeger Tracing backend -->
+      <dependency>
+         <groupId>com.uber.jaeger</groupId>
+         <artifactId>jaeger-core</artifactId>
+         <version>0.24.0</version>
+      </dependency>    
+   </dependencies>
+
+   <build>
+      <extensions>
+         <extension>
+            <groupId>kr.motd.maven</groupId>
+            <artifactId>os-maven-plugin</artifactId>
+            <version>1.5.0.Final</version>
+         </extension>
+      </extensions>
+      <plugins>
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <version>3.7.0</version>
+            <configuration>
+               <source>1.6</source>
+               <target>1.6</target>
+            </configuration>
+         </plugin>
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <version>2.20.1</version>
+            <configuration>
+               <suiteXmlFiles>
+                  <suiteXmlFile>${suite}</suiteXmlFile>
+               </suiteXmlFiles>
+            </configuration>
+         </plugin>
+         <plugin>
+            <groupId>org.xolstice.maven.plugins</groupId>
+            <artifactId>protobuf-maven-plugin</artifactId>
+            <version>0.5.0</version>
+            <configuration>
+               <protocExecutable>/repo/grpc_example/protobuf/bin/bin/protoc</protocExecutable>
+               <protocArtifact>com.google.protobuf:protoc:3.5.1-1:exe:${os.detected.classifier}</protocArtifact>
+               <pluginId>grpc-java</pluginId>
+               <pluginArtifact>io.grpc:protoc-gen-grpc-java:1.10.0:exe:${os.detected.classifier}</pluginArtifact>
+            </configuration>
+            <executions>
+               <execution>
+                  <goals>
+                     <goal>compile</goal>
+                     <goal>compile-custom</goal>
+                     <!-- <goal>test-compile</goal> -->
+                  </goals>
+               </execution>
+            </executions>
+         </plugin>
+         <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>build-helper-maven-plugin</artifactId>
+            <version>1.8</version>
+            <executions>
+               <execution>
+                  <id>add-source</id>
+                  <phase>generate-sources</phase>
+                  <goals>
+                     <goal>add-source</goal>
+                  </goals>
+                  <configuration>
+                     <sources>
+                        <source>${project.build.directory}/generated-sources/protobuf/java/</source>
+                        <source>${project.build.directory}/generated-sources/protobuf/grpc-java/</source>
+                     </sources>
+                  </configuration>
+               </execution>
+            </executions>
+         </plugin>
+         <plugin>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-maven-plugin</artifactId>
+            <executions>
+               <execution>
+                  <goals>
+                     <goal>repackage</goal>
+                  </goals>
+                  <configuration>
+                     <classifier>spring-boot</classifier>
+                     <mainClass>
+                        com.github.samdaniel.tcs.microservices.uniqueid.core.Main
+                     </mainClass>
+                  </configuration>
+               </execution>
+            </executions>
+         </plugin>
+      </plugins>
+
+      <pluginManagement>
+         <plugins>
+            <plugin>
+               <groupId>org.eclipse.m2e</groupId>
+               <artifactId>lifecycle-mapping</artifactId>
+               <version>1.0.0</version>
+               <configuration>
+                  <lifecycleMappingMetadata>
+                     <pluginExecutions>
+                        <pluginExecution>
+                           <pluginExecutionFilter>
+                              <groupId>org.codehaus.mojo</groupId>
+                              <artifactId>build-helper-maven-plugin</artifactId>
+                              <versionRange>[1.0,)</versionRange>
+                              <goals>
+                                 <goal>parse-version</goal>
+                                 <goal>add-source</goal>
+                                 <goal>maven-version</goal>
+                                 <goal>add-resource</goal>
+                                 <goal>add-test-resource</goal>
+                                 <goal>add-test-source</goal>
+                              </goals>
+                           </pluginExecutionFilter>
+                           <action>
+                              <execute>
+                                 <runOnConfiguration>true</runOnConfiguration>
+                                 <runOnIncremental>true</runOnIncremental>
+                              </execute>
+                           </action>
+                        </pluginExecution>
+                     </pluginExecutions>
+                  </lifecycleMappingMetadata>
+               </configuration>
+            </plugin>
+         </plugins>
+      </pluginManagement>
+
+   </build>
+
+
+
+</project>
