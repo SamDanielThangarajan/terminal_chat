@@ -1,0 +1,10 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+
+<suite name="Suite">
+  <test name="registry-grpc-test">
+    <classes>
+      <class name="com.github.samdaniel.tcs.microservices.registry.grpc.TestRegistryGrpcServer" />
+    </classes>
+  </test> <!-- Test -->
+</suite> <!-- Suite -->
+

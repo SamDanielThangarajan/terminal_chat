@@ -1,9 +1,9 @@
-package com.github.samdaniel.tcs.microservices.uniqueid.core;
+package com.github.samdaniel.tcs.microservices.registry.config;
 
 import java.io.IOException;
-
 import com.uber.jaeger.Configuration;
 import com.uber.jaeger.samplers.ProbabilisticSampler;
+
 import io.opentracing.noop.NoopTracerFactory;
 
 public class Tracer {
@@ -13,7 +13,7 @@ public class Tracer {
 	public static class Factory {
 		public static void create(String traceBackend) throws IOException {
 			if (traceBackend.equals("jaeger")) {
-				com.uber.jaeger.Tracer tr = (com.uber.jaeger.Tracer)new Configuration("uniqueid-service",
+				com.uber.jaeger.Tracer tr = (com.uber.jaeger.Tracer)new Configuration("registry-service",
 			    		new Configuration.SamplerConfiguration(ProbabilisticSampler.TYPE, 1),
 			    		new Configuration.ReporterConfiguration()).getTracer();
 				Tracer.setTracer(tr);

@@ -4,4 +4,10 @@
 cd uniqueid
 mvn package
 docker build . -t uniqueid-service
-cd --
+cd ..
+
+# Build registry
+cd registry/registry
+mvn package
+docker build . -t registry-service
+cd ../..

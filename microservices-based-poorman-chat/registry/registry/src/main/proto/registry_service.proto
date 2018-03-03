@@ -1,0 +1,40 @@
+syntax = "proto3";
+option java_package = "com.github.samdaniel.tcs.microservices.registry.generated";
+
+enum UserStatus {
+ 	USER_CREATED = 0;
+ 	USER_EXISTS = 1;
+ 	USER_CREATION_FAILED = 2;
+ }
+
+////////////////////////////////////////////////////
+// USER REGISTRATION
+///
+ 
+message UserRegistrationResponse {
+ 	UserStatus status = 1;
+ 	string additional_information = 2;
+} 
+
+message UserRegistrationRequest {
+	string user_name = 1;   // Used to login
+	string password = 2;    // Used to login
+	string alias_name = 3;  // Visible to other as
+}
+
+///////////////////////////////////////////////////
+// IS USER PRESENT
+///
+message UserCheckRequest {
+	string user_name = 1;
+}
+
+message UserCheckResponse {
+	bool status = 1;
+}
+
+ 
+service RegistryService {
+ 	rpc RegisterUser (UserRegistrationRequest) returns (UserRegistrationResponse);
+ 	rpc IsUserPresent (UserCheckRequest) returns (UserCheckResponse);
+}
